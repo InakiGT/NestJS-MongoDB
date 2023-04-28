@@ -1,7 +1,5 @@
 import { Injectable, NotFoundException, Inject } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
-import { Client } from 'pg';
-import { InjectRepository } from '@nestjs/typeorm';
 
 import { User } from '../entities/user.entity';
 import { CreateUserDto, UpdateUserDto } from '../dtos/user.dto';
@@ -9,7 +7,6 @@ import { Order } from '../entities/order.entity';
 import { ProductsService } from '../../products/services/products.service';
 import { CustomersService } from '../../users/services/customers.service';
 import config from '../../config';
-import { Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
@@ -17,41 +14,26 @@ export class UsersService {
     private productsService: ProductsService,
     private CustumerService: CustomersService,
     @Inject(config.KEY) private configService: ConfigType<typeof config>,
-    @Inject('PG') private clientPg: Client,
-    @InjectRepository(User) private userRepo: Repository<User>,
   ) {}
 
   findAll() {
-    return this.userRepo.find({
-      relations: ['customer'],
-    });
+    return [];
   }
 
   async findOne(id: number) {
-    const user = await this.userRepo.findOneBy({ id });
-    if (!user) {
-      throw new NotFoundException(`User #${id} not found`);
-    }
-    return user;
+    return {};
   }
 
   async create(data: CreateUserDto) {
-    const newUser = this.userRepo.create(data);
-    if (data.customerId) {
-      const customer = await this.CustumerService.findOne(data.customerId);
-      newUser.customer = customer;
-    }
-    return this.userRepo.save(newUser);
+    return {};
   }
 
   async update(id: number, changes: UpdateUserDto) {
-    const user = await this.userRepo.findOneBy({ id });
-    this.userRepo.merge(user, changes);
-    return this.userRepo.save(user);
+    return {};
   }
 
   remove(id: number) {
-    return this.userRepo.delete(id);
+    return 0;
   }
 
   async getOrdersByUser(id: number) {
@@ -62,16 +44,5 @@ export class UsersService {
       user,
       products: await this.productsService.findAll(),
     };
-  }
-
-  getTasks() {
-    return new Promise((resolve, reject) => {
-      this.clientPg.query('SELECT * FROM tasks', (err, res) => {
-        if (err) {
-          reject(err);
-        }
-        resolve(res.rows);
-      });
-    });
   }
 }
