@@ -25,11 +25,6 @@ export class CreateUserDto {
   @ApiProperty()
   @IsNotEmpty()
   readonly role: string;
-
-  @ApiProperty()
-  @IsPositive()
-  @IsOptional()
-  readonly customerId: number;
 }
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {}

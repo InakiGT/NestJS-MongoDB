@@ -1,11 +1,16 @@
-import { Customer } from './customer.entity';
+import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
 
-export class User {
-  id: number;
+@Schema()
+export class User extends Document {
+  @Prop({ required: true, unique: true })
   email: string;
+
+  @Prop({ required: true })
   password: string;
+
+  @Prop()
   role: string;
-  createdAt: Date;
-  updatedAt: Date;
-  customer: Customer;
 }
+
+export const UserSchema = SchemaFactory.createForClass(User);

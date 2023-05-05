@@ -1,11 +1,19 @@
-import { Exclude, Expose } from 'class-transformer';
-import { Customer } from './customer.entity';
-import { OrderItem } from './order-product.entity';
+import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Document, Types } from 'mongoose';
 
-export class Order {
-  id: number;
+import { Customer } from './customer.entity';
+import { Product } from '../../products/entities/product.entity';
+
+@Schema()
+export class Order extends Document {
+  @Prop({ type: Date })
   date: Date;
-  updatedAt: Date;
-  customer: Customer;
-  items: OrderItem[];
+
+  @Prop({ type: Types.ObjectId, ref: Customer.name, required: true })
+  customer: Customer | Types.ObjectId;
+
+  @Prop({ type: [{ type: Types.ObjectId, ref: Product.name }] })
+  products: Types.Array<Product>;
 }
+
+export const OrderSchema = SchemaFactory.createForClass(Order);
