@@ -30,6 +30,10 @@ export class OrdersService {
     return order;
   }
 
+  ordersByCustomer(id: string) {
+    return this.orderModel.findOne({ userId: id }).populate('products').exec();
+  }
+
   async create(data: CreateOrderDto) {
     const newOrder = new this.orderModel(data);
     return await newOrder.save();

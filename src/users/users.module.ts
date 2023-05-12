@@ -14,6 +14,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './entities/user.entity';
 import { Customer, CustomerSchema } from './entities/customer.entity';
 import { Order, OrderSchema } from './entities/order.entity';
+import { ProfileController } from './controllers/profile.controller';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { Order, OrderSchema } from './entities/order.entity';
     UsersController,
     OrderController,
     OrderItemController,
+    ProfileController,
   ],
   providers: [CustomersService, UsersService, OrdersService, OrderItemService],
   exports: [UsersService],
