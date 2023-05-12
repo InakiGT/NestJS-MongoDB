@@ -36,27 +36,7 @@ const API_KEY_PROD = 'PROD12345678';
       provide: 'API_KEY', // nombre
       useValue: process.env.NODE_ENV === 'prod' ? API_KEY_PROD : API_KEY, // valor
     },
-    {
-      provide: 'MONGO',
-      inject: [config.KEY],
-      useFactory: async (configService: ConfigType<typeof config>) => {
-        const {
-          connection,
-          user,
-          password,
-          host,
-          dbName,
-        } = configService.mongo;
-        const uri = `${connection}://${user}:${password}@${host}/?authMechanism=DEFAULT`;
-
-        const client = new MongoClient(uri);
-        await client.connect();
-        const database = client.db(dbName);
-
-        return database;
-      },
-    },
   ],
-  exports: ['API_KEY', 'MONGO', MongooseModule],
+  exports: ['API_KEY', MongooseModule],
 })
 export class DatabaseModule {}

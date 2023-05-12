@@ -8,7 +8,6 @@ import config from './config';
 export class AppService {
   constructor(
     @Inject('TASKS') private tasks: any[],
-    @Inject('MONGO') private database: Db,
     @Inject(config.KEY) private configService: ConfigType<typeof config>,
   ) {}
 
@@ -19,8 +18,8 @@ export class AppService {
   }
 
   getTasks() {
-    const tasksCollection = this.database.collection('tasks');
+    // const tasksCollection = this.database.collection('tasks');
 
-    return tasksCollection.find().toArray();
+    return [];
   }
 }
